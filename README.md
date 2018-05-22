@@ -13,8 +13,8 @@
 ```	
 
 
-组件内有部分注释，小伙伴可根据业务需求自行修改
-实际业务中列表数据应该是包含多个对象的数组
+组件内有部分注释，小伙伴可根据业务需求自行修改，
+实际业务中列表数据应该是包含多个对象的数组，
 demo中只渲染了字符串数组
 ```bash
 	<li v-for="(item,i) in data" :style="{height:liheight+'px',lineHeight:liheight+'px'}" 
@@ -29,7 +29,7 @@ demo中只渲染了字符串数组
 
 
 
-###在父组件中引入
+### 在父组件中引入
 
 ```bash
 	//template
@@ -57,4 +57,8 @@ demo中只渲染了字符串数组
 		
 ```	
 
+样式：
+[预览图](http://m.qpic.cn/psb?/348b0b66-1122-4625-babe-eadc4afe8b15/JkJydOVZc1rjuZdXZwz8L8k3QO1i5Zji5q0It2J9qeg!/b/dGYBAAAAAAAA&bo=PwH6AD8B.gADFzI!&rf=viewer_4&t=5)
 
+
+附带原生js版本

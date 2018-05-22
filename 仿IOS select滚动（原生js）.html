@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width">
+    <title>Document</title>
+    <style type="text/css">
+        html,body,div,ul,li{
+            margin:0;
+            padding:0;
+        }
+        body {
+            padding:20px;
+        }
+        .box {
+            height:220px;
+            overflow:hidden;
+            position:relative;
+            background: linear-gradient(to bottom,rgb(150,150,150),rgb(240,240,240),rgb(150,150,150));
+
+        }
+        .list {
+            transition:top .06s linear;
+            position:absolute;
+            top:0px;
+            left:0;
+            width:100%;
+            list-style:none;
+            padding:0;
+            text-align: center;
+
+        }
+        .list li {
+            height:44px;
+            line-height:43px;
+            box-sizing:border-box;
+            user-select: none;
+            transform-origin: center center;
+        }
+        #wrap {
+            position: absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            z-index:2;
+        }
+        #wrap::before {
+            content:'';
+            position: absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:88px;
+            border-bottom:1px solid lightskyblue;
+        }
+        #wrap::after {
+            content:'';
+            position: absolute;
+            bottom:0;
+            left:0;
+            width:100%;
+            height:88px;
+            border-top:1px solid lightskyblue;
+        }
+
+    </style>
+</head>
+<body>
+   <div class="box">
+        <div id="wrap">
+
+        </div>
+       <ul class="list" id="id">
+           <li> &emsp;</li>
+           <li> &emsp;</li>
+           <li>静安区</li>
+           <li>长宁区</li>
+           <li>浦东新区</li>
+           <li>航头动</li>
+           <li>嘉定区</li>
+           <li>黄浦区</li>
+           <li>宝山区</li>
+           <li>崇明岛</li>
+           <li>杨浦区</li>
+           <li>徐汇区</li>
+           <li>&emsp;</li>
+           <li>&emsp;</li>
+       </ul>
+   </div>
+   <div>
+       选中值为：<span id="selected"></span>
+   </div>
+</body>
+<script type="text/javascript">
+    var wrap = document.getElementById('wrap');
+    var obj = document.getElementById('id');
+    var selecteded = document.getElementById('selected');
+    var index = 2;
+    var currentElement = obj.children[index];
+    selecteded.innerText = obj.children[2].innerText;
+
+    siblingsStyle();
+
+    var oldTop = null;//触摸开始位置
+    var top1 = obj.offsetTop;//初始定位top值
+    //触摸开始
+    wrap.addEventListener('touchstart',function(event){
+        oldTop = event.targetTouches[0].pageY;
+        top1 = obj.offsetTop;
+
+    },false);
+    //滑动监听
+    wrap.addEventListener('touchmove',function(event){
+        if(event.targetTouches.length == 1){
+            var touch = event.targetTouches[0];
+            obj.style.top = (touch.pageY - oldTop + top1) + 'px';
+
+
+            var arr  = document.querySelectorAll("li")
+            for(var i = 0;i<arr.length;i++){
+                arr[i].style.color = '#333'
+            }
+
+            var backLength = obj.offsetTop%44;//余量
+                if(-backLength>22){
+                    index = Math.floor(-obj.offsetTop/44)+3;//当前选项的下标
+                }else {
+                    index = Math.floor(-obj.offsetTop/44)+2;//当前选项的下标
+                }
+                currentElement = obj.children[index];
+            siblingsStyle()
+
+        }
+    },false);
+    // 触摸结束
+    wrap.addEventListener('touchend',function(event){
+            if(obj.offsetTop > 0){
+               obj.style.top = 0;
+               index = 2;
+               currentElement = obj.children[2];
+            }else if(-obj.offsetTop > obj.clientHeight-220){
+               obj.style.top = -(obj.clientHeight - 220) +'px';
+               index = obj.children.length-3;
+               currentElement = obj.children[obj.children.length-3];
+            }else {
+                var backLength = obj.offsetTop%44;//余量
+                if(-backLength>22){
+                    index = Math.floor(-obj.offsetTop/44)+3;//当前选项的下标
+                }else {
+                    index = Math.floor(-obj.offsetTop/44)+2;//当前选项的下标
+                }
+                currentElement = obj.children[index];
+                if(-obj.offsetTop%44>22){//超过高度一半的
+                    obj.style.top = (obj.offsetTop - 44 - backLength) +'px';
+                }else {//未超过高度一半的
+                    obj.style.top = (obj.offsetTop - backLength) +'px';
+                }
+            }
+            siblingsStyle();
+    },false);
+
+    function siblingsStyle(){//渲染滚轮样式
+
+        try{
+          currentElement.style.color = 'red';//选中样式
+          currentElement.style.transform = 'translateZ(0px) rotateX(0deg)';
+
+          obj.children[index-1].style.transform = 'translateZ(-20px) rotateX(30deg)';
+          obj.children[index-1].style.color = '#555';
+
+          obj.children[index-2].style.transform = 'translateZ(-40px) rotateX(60deg)';
+          obj.children[index-2].style.color = '#888';
+
+          obj.children[index+1].style.transform = 'translateZ(20px) rotateX(-30deg)';
+          obj.children[index+1].style.color = '#555';
+
+          obj.children[index+2].style.transform = 'translateZ(40px) rotateX(-60deg)';
+          obj.children[index+2].style.color = '#888';
+          selecteded.innerText =currentElement.innerText;//回显选中值
+        }catch(e){
+
+        }
+
+
+    }
+
+</script>
+</html>
